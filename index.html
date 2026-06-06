@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEW STYLE - Catálogo Digital</title>
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root { --cor-fundo: #0a0a0a; --cor-texto: #ffffff; --cor-destaque: #e60000; --cor-card: #1a1a1a; }
+        body { background-color: var(--cor-fundo); color: var(--cor-texto); font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
+        header { background-color: #000; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--cor-destaque); }
+        .logo { font-family: 'DynaPuff', cursive; font-size: 2.5rem; color: var(--cor-destaque); margin: 0; text-shadow: 2px 2px 0px #000; }
+        button { background-color: var(--cor-destaque); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .card-produto { background-color: var(--cor-card); border: 1px solid #333; border-radius: 12px; padding: 15px; text-align: center; }
+        .card-produto img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+        .preco { color: var(--cor-destaque); font-size: 1.3rem; font-weight: bold; margin: 10px 0; }
+        #areaAdmin { display: none; background-color: #111; padding: 20px; margin: 20px; border: 2px solid var(--cor-destaque); border-radius: 15px; }
+        input, select { width: 100%; padding: 12px; background: #222; color: white; border: 1px solid #444; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1 class="logo">NEW STYLE</h1>
+        <button onclick="window.acessarAdmin()">Admin</button>
+    </header>
+
+    <div id="areaAdmin">
+        <h2 id="adminTituloForm">Gerenciar Produto</h2>
+        <form id="formAdminProd">
+            <input type="text" id="adminProdNome" placeholder="Nome da Peça" required>
+            <select id="adminProdCategoria">
+                <option value="Camisa">Camisa</option><option value="Bermuda">Bermuda</option>
+                <option value="Short">Short</option><option value="Calça">Calça</option>
+                <option value="Jaqueta">Jaqueta</option><option value="Moletom">Moletom</option>
+                <option value="Perfumes">Perfumes</option><option value="Tênis">Tênis</option>
+            </select>
+            <input type="number" id="adminProdPreco" placeholder="Preço" step="0.01" required>
+            <input type="url" id="adminProdF1" placeholder="Link da Foto" required>
+            <button type="submit">Salvar</button>
+            <button type="button" onclick="window.fecharAdmin()" style="background:#444">Fechar</button>
+        </form>
+    </div>
+
+    <div class="catalogo" id="vitrineProdutos"></div>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
+        import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-analytics.js";
+        import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyAo9XY0ZVLsFtyxDfRUGSIcqZYpaWnfb9U",
+            authDomain: "newstyle-catalogo.firebaseapp.com",
+            projectId: "newstyle-catalogo",
+            storageBucket: "newstyle-catalogo.firebasestorage.app",
+            messagingSenderId: "371496179203",
+            appId: "1:371496179203:web:982c39a0f82eee8a10e036",
+            measurementId: "G-K7023PTGYY"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const db = getFirestore(app);
+
+        // Funções do Sistema
+        window.produtos = [];
+        onSnapshot(collection(db, "produtos"), (snapshot) => {
+            window.produtos = [];
+            snapshot.forEach((doc) => window.produtos.push(doc.data()));
+            window.renderizar(window.produtos);
+        });
+
+        window.renderizar = (lista) => {
+            const vitrine = document.getElementById('vitrineProdutos');
+            vitrine.innerHTML = '';
+            lista.forEach(prod => {
+                vitrine.innerHTML += `
+                    <div class="card-produto">
+                        <img src="${prod.f1}" alt="${prod.nome}">
+                        <h3>${prod.nome}</h3>
+                        <div class="preco">R$ ${prod.preco}</div>
+                        <div id="btnsAdmin" style="display:none">
+                            <button onclick="window.excluir('${prod.id}')" style="background:var(--cor-destaque)">Excluir</button>
+                        </div>
+                    </div>`;
+            });
+        };
+
+        window.acessarAdmin = () => {
+            if (prompt("Senha:") === 'NEWSTYLE26') {
+                document.getElementById('areaAdmin').style.display = 'block';
+                document.querySelectorAll('#btnsAdmin').forEach(el => el.style.display = 'block');
+            } else alert("Senha incorreta!");
+        };
+
+        window.fecharAdmin = () => {
+            document.getElementById('areaAdmin').style.display = 'none';
+            document.querySelectorAll('#btnsAdmin').forEach(el => el.style.display = 'none');
+        };
+
+        window.excluir = async (id) => await deleteDoc(doc(db, "produtos", String(id)));
+
+        document.getElementById('formAdminProd').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = Date.now().toString();
+            await setDoc(doc(db, "produtos", id), {
+                id,
+                nome: document.getElementById('adminProdNome').value,
+                categoria: document.getElementById('adminProdCategoria').value,
+                preco: document.getElementById('adminProdPreco').value,
+                f1: document.getElementById('adminProdF1').value
+            });
+            document.getElementById('formAdminProd').reset();
+            alert("Produto Salvo!");
+        });
+    </script>
+</body>
+</html>
