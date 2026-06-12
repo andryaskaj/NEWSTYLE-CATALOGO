@@ -9,61 +9,109 @@
         :root {
             --fundo: #050505;
             --header: #000000;
-            --card: #121212;
-            --texto: #ffffff;
-            --texto-sec: #bbbbbb;
-            --accent: #e60000;
+            --card-fundo: #fff5f5; /* Branco meio avermelhado */
+            --card-texto: #111111; /* Texto escuro para contrastar no card claro */
+            --texto-claro: #ffffff;
+            --accent: #e60000; /* Vermelho principal */
         }
-        body { background-color: var(--fundo); color: var(--texto); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 50px; }
+        body { background-color: var(--fundo); color: var(--texto-claro); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 90px; }
         
-        header { background-color: var(--header); padding: 20px; display: flex; align-items: center; border-bottom: 2px solid var(--accent); }
-        .logo { font-family: 'DynaPuff', cursive; font-size: 2rem; color: var(--accent); margin: 0 auto; text-shadow: 2px 2px 0px #000; }
+        /* Cabeçalho com Logo Centralizada */
+        header { background-color: var(--header); padding: 20px; display: flex; align-items: center; justify-content: center; border-bottom: 3px solid var(--accent); position: relative; }
+        .logo { font-family: 'DynaPuff', cursive; font-size: 2.3rem; color: var(--accent); margin: 0; text-shadow: 2px 2px 0px #000; text-align: center; }
         
-        .filtros { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; }
-        button { background: var(--card); color: white; border: 1px solid #333; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
-        button.ativo { background: var(--accent); border-color: var(--accent); }
+        .btn-admin-topo { position: absolute; right: 20px; background: transparent; color: #666; border: 1px solid #333; padding: 6px 12px; border-radius: 5px; cursor: pointer; font-size: 0.8rem; }
 
-        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #222; }
-        .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; }
-        .miniaturas { display: flex; gap: 5px; margin: 10px 0; }
-        .miniaturas img { width: 30%; height: 60px; object-fit: cover; cursor: pointer; border-radius: 4px; }
-        
-        .preco { font-size: 1.4rem; font-weight: bold; color: var(--accent); margin: 10px 0; }
-        .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; margin-top: 5px; }
+        /* Filtros de Categorias */
+        .filtros { display: flex; justify-content: center; gap: 8px; padding: 20px; flex-wrap: wrap; max-width: 1000px; margin: 0 auto; }
+        .filtros button { background: #111; color: white; border: 1px solid #333; padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: 0.3s; font-weight: 600; }
+        .filtros button.ativo { background: var(--accent); border-color: var(--accent); }
 
-        #cart-bar { position: fixed; bottom: 0; width: 100%; background: var(--header); padding: 15px; text-align: center; border-top: 2px solid var(--accent); display: none; }
-        #areaAdmin { display: none; background: #1a1a1a; padding: 20px; margin: 20px; border-radius: 10px; }
+        /* Vitrine de Produtos */
+        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        
+        /* Card Branco-Avermelhado */
+        .card { background: var(--card-fundo); color: var(--card-texto); padding: 15px; border-radius: 16px; border: 2px solid #ffe0e0; box-shadow: 0 4px 15px rgba(230, 0, 0, 0.1); display: flex; flex-direction: column; justify-content: space-between; }
+        .card img.foto-principal { width: 100%; height: 240px; object-fit: cover; border-radius: 10px; }
+        
+        /* Carrossel / Miniaturas */
+        .miniaturas { display: flex; gap: 6px; margin: 10px 0; justify-content: center; }
+        .miniaturas img { width: 30%; height: 55px; object-fit: cover; cursor: pointer; border-radius: 6px; border: 2px solid #ddd; transition: 0.2s; }
+        .miniaturas img:hover { border-color: var(--accent); }
+        
+        .card h3 { margin: 10px 0 5px 0; font-size: 1.15rem; font-weight: 600; }
+        .card .categoria-tag { font-size: 0.8rem; color: #666; text-transform: uppercase; font-weight: bold; margin-bottom: 5px; }
+        .preco { font-size: 1.5rem; font-weight: bold; color: var(--accent); margin: 5px 0 15px 0; }
+        
+        /* Botões de Ação */
+        .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.2s; font-size: 1rem; }
+        .btn-acao:hover { background: #b30000; }
+        
+        .admin-btns { display: none; margin-top: 10px; border-top: 1px dashed #ccc; padding-top: 10px; }
+        .btn-excluir { width: 100%; background: #333; color: #ff4444; border: 1px solid #444; padding: 8px; border-radius: 6px; cursor: pointer; font-weight: bold; }
+
+        /* Área do Administrador */
+        #areaAdmin { display: none; background: #111; padding: 25px; margin: 20px auto; border-radius: 15px; max-width: 500px; border: 2px solid var(--accent); }
+        #areaAdmin h2 { margin-top: 0; color: white; }
+        #areaAdmin input, #areaAdmin select { width: 100%; padding: 12px; background: #222; color: white; border: 1px solid #444; border-radius: 6px; margin-bottom: 12px; box-sizing: border-box; font-size: 1rem; }
+
+        /* Barra do Carrinho Fixa */
+        #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; background: var(--header); padding: 15px; text-align: center; border-top: 3px solid var(--accent); display: none; box-shadow: 0 -5px 15px rgba(0,0,0,0.5); z-index: 999; }
+        #cart-bar button { max-width: 400px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo">NEW STYLE</h1>
-        <button onclick="window.acessarAdmin()" style="position:absolute; right: 20px; background: transparent; border: 1px solid #444;">Admin</button>
+        <button onclick="window.acessarAdmin()" class="btn-admin-topo">Painel</button>
     </header>
 
+    <!-- Formulário do Admin -->
     <div id="areaAdmin">
+        <h2>Cadastrar Novo Produto</h2>
         <form id="formAdminProd">
-            <input type="text" id="nome" placeholder="Nome" required style="width:100%; padding:10px; margin-bottom:5px;">
-            <select id="cat" style="width:100%; padding:10px; margin-bottom:5px;">
-                <option>Camisa</option><option>Bermuda</option><option>Tênis</option>
+            <input type="text" id="adminNome" placeholder="Nome da Peça" required>
+            <select id="adminCategoria">
+                <option value="Camisa">Camisa</option>
+                <option value="Bermuda">Bermuda</option>
+                <option value="Calça">Calça</option>
+                <option value="Jaqueta">Jaqueta</option>
+                <option value="Moletom">Moletom</option>
+                <option value="Boné">Boné</option>
+                <option value="Tênis">Tênis</option>
+                <option value="Perfume">Perfume</option>
+                <option value="Conjuntos">Conjuntos</option>
             </select>
-            <input type="number" id="preco" placeholder="Preço" required style="width:100%; padding:10px; margin-bottom:5px;">
-            <input type="url" id="f1" placeholder="Foto Principal" required style="width:100%; padding:10px; margin-bottom:5px;">
-            <input type="url" id="f2" placeholder="Foto 2" style="width:100%; padding:10px; margin-bottom:5px;">
-            <button type="submit" class="btn-acao">Salvar</button>
+            <input type="number" id="adminPreco" placeholder="Preço (Ex: 89.90)" step="0.01" required>
+            <input type="url" id="adminF1" placeholder="Link da Foto 1 (Principal)" required>
+            <input type="url" id="adminF2" placeholder="Link da Foto 2 (Opcional)">
+            <input type="url" id="adminF3" placeholder="Link da Foto 3 (Opcional)">
+            <button type="submit" class="btn-acao">Salvar Produto</button>
+            <button type="button" onclick="window.fecharAdmin()" style="background:#333; width:100%; color:white; border:none; padding:10px; border-radius:8px; margin-top:5px; cursor:pointer;">Fechar Painel</button>
         </form>
     </div>
 
+    <!-- Filtros dinâmicos com a lista solicitada -->
     <div class="filtros" id="btnsFiltro">
-        <button class="ativo" onclick="window.filtrar('Todos')">Todos</button>
+        <button id="btn-todos" class="ativo" onclick="window.filtrar('Todos')">Todos</button>
+        <button onclick="window.filtrar('Camisa')">Camisas</button>
+        <button onclick="window.filtrar('Bermuda')">Bermudas</button>
+        <button onclick="window.filtrar('Calça')">Calças</button>
+        <button onclick="window.filtrar('Jaqueta')">Jaquetas</button>
+        <button onclick="window.filtrar('Moletom')">Moletons</button>
+        <button onclick="window.filtrar('Boné')">Bonés</button>
+        <button onclick="window.filtrar('Tênis')">Tênis</button>
+        <button onclick="window.filtrar('Perfume')">Perfumes</button>
+        <button onclick="window.filtrar('Conjuntos')">Conjuntos</button>
     </div>
 
+    <!-- Vitrine -->
     <div class="catalogo" id="vitrine"></div>
 
+    <!-- Barra de checkout fixa -->
     <div id="cart-bar">
-        <button onclick="window.finalizarPedido()" class="btn-acao" style="max-width: 300px;">Finalizar Pedido (WhatsApp)</button>
+        <button onclick="window.finalizarPedido()" class="btn-acao">Enviar Pedido via WhatsApp 💬</button>
     </div>
 
     <script type="module">
@@ -81,64 +129,148 @@
         };
 
         const db = getFirestore(initializeApp(firebaseConfig));
+        
         window.produtos = [];
-        window.carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+        window.carrinho = JSON.parse(localStorage.getItem('newstyle_cart')) || [];
+        window.modoAdminAtivo = false;
+        window.categoriaAtual = 'Todos';
 
+        if(window.carrinho.length > 0) {
+            document.getElementById('cart-bar').style.display = 'block';
+        }
+
+        // Sincronização em Tempo Real
         onSnapshot(collection(db, "produtos"), (snap) => {
             window.produtos = [];
             snap.forEach(d => window.produtos.push(d.data()));
-            window.renderizar(window.produtos);
+            window.renderizar();
         });
 
-        window.renderizar = (lista) => {
+        // Renderização da Vitrine
+        window.renderizar = () => {
             const vitrine = document.getElementById('vitrine');
             vitrine.innerHTML = '';
-            lista.forEach(p => {
+            
+            const listaFiltrada = window.categoriaAtual === 'Todos' 
+                ? window.produtos 
+                : window.produtos.filter(p => p.categoria === window.categoriaAtual);
+
+            if(listaFiltrada.length === 0) {
+                vitrine.innerHTML = `<p style="grid-column: 1/-1; text-align:center; color:#666; padding: 40px 0;">Nenhum produto encontrado nesta categoria.</p>`;
+                return;
+            }
+
+            listaFiltrada.forEach(p => {
+                let htmlMiniaturas = `<img src="${p.f1}" onclick="document.getElementById('imgMain-${p.id}').src='${p.f1}'">`;
+                if (p.f2) htmlMiniaturas += `<img src="${p.f2}" onclick="document.getElementById('imgMain-${p.id}').src='${p.f2}'">`;
+                if (p.f3) htmlMiniaturas += `<img src="${p.f3}" onclick="document.getElementById('imgMain-${p.id}').src='${p.f3}'">`;
+
                 vitrine.innerHTML += `
                     <div class="card">
-                        <img src="${p.f1}" id="imgMain-${p.id}">
-                        <div class="miniaturas">
-                            <img src="${p.f1}" onclick="document.getElementById('imgMain-${p.id}').src='${p.f1}'">
-                            ${p.f2 ? `<img src="${p.f2}" onclick="document.getElementById('imgMain-${p.id}').src='${p.f2}'">` : ''}
+                        <div>
+                            <span class="categoria-tag">${p.categoria}</span>
+                            <img src="${p.f1}" class="foto-principal" id="imgMain-${p.id}" onerror="this.src='https://placehold.co/300x300?text=Sem+Foto'">
+                            <div class="miniaturas">${htmlMiniaturas}</div>
+                            <h3>${p.nome}</h3>
                         </div>
-                        <h3>${p.nome}</h3>
-                        <div class="preco">R$ ${p.preco}</div>
-                        <button class="btn-acao" onclick="window.addCarrinho('${p.nome}', '${p.preco}')">Adicionar ao Carrinho</button>
+                        <div>
+                            <div class="preco">R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')}</div>
+                            <button class="btn-acao" onclick="window.addCarrinho('${p.nome}', '${p.preco}')">Adicionar ao Carrinho</button>
+                            
+                            <div class="admin-btns" id="btnDel-${p.id}" style="display: ${window.modoAdminAtivo ? 'block' : 'none'};">
+                                <button class="btn-excluir" onclick="window.excluir('${p.id}')">Excluir Produto</button>
+                            </div>
+                        </div>
                     </div>`;
             });
         };
 
         window.addCarrinho = (nome, preco) => {
-            window.carrinho.push({nome, preco});
-            localStorage.setItem('carrinho', JSON.stringify(window.carrinho));
+            window.carrinho.push({ nome, preco: parseFloat(preco) });
+            localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
             document.getElementById('cart-bar').style.display = 'block';
-            alert(nome + " adicionado!");
+            alert(`"${nome}" adicionado com sucesso ao seu carrinho!`);
         };
 
         window.finalizarPedido = () => {
-            const itens = window.carrinho.map(i => i.nome).join(', ');
-            window.location.href = `https://wa.me/5548999999999?text=Olá! Gostaria de comprar: ${itens}`;
+            if(window.carrinho.length === 0) return alert("Seu carrinho está vazio!");
+            
+            let total = 0;
+            let mensagem = "Olá! Gostaria de fazer o seguinte pedido do catálogo:\n\n";
+            
+            window.carrinho.forEach((item, index) => {
+                mensagem += `*${index + 1}.* ${item.nome} — R$ ${item.preco.toFixed(2).replace('.', ',')}\n`;
+                total += item.preco;
+            });
+            
+            mensagem += `\n*Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}`;
+            
+            window.carrinho = [];
+            localStorage.removeItem('newstyle_cart');
+            document.getElementById('cart-bar').style.display = 'none';
+
+            // Lembre-se de alterar este número abaixo para o seu número comercial real!
+            const seuNumeroWhatsApp = "5548992225893"; 
+            window.location.href = `https://wa.me/${seuNumeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
         };
 
         window.filtrar = (cat) => {
-            const filtrados = cat === 'Todos' ? window.produtos : window.produtos.filter(p => p.categoria === cat);
-            window.renderizar(filtrados);
+            window.categoriaAtual = cat;
+            document.querySelectorAll('.filtros button').forEach(b => b.classList.remove('ativo'));
+            event.target.classList.add('ativo');
+            window.renderizar();
         };
 
-        window.acessarAdmin = () => { if(prompt("Senha:") === 'NEWSTYLE26') document.getElementById('areaAdmin').style.display = 'block'; }
+        window.acessarAdmin = () => {
+            if (prompt("Insira a senha de administrador:") === 'NEWSTYLE26') {
+                window.modoAdminAtivo = true;
+                document.getElementById('areaAdmin').style.display = 'block';
+                document.querySelectorAll('.admin-btns').forEach(el => el.style.display = 'block');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            } else {
+                alert("Senha incorreta!");
+            }
+        };
+
+        window.fecharAdmin = () => {
+            window.modoAdminAtivo = false;
+            document.getElementById('areaAdmin').style.display = 'none';
+            document.querySelectorAll('.admin-btns').forEach(el => el.style.display = 'none');
+        };
+
+        // Sistema de Exclusão Corrigido
+        window.excluir = async (id) => {
+            if(confirm("Tem certeza que deseja remover este produto da vitrine?")) {
+                try {
+                    await deleteDoc(doc(db, "produtos", String(id)));
+                    alert("Produto removido com sucesso!");
+                } catch (error) {
+                    alert("Erro ao excluir do banco de dados: " + error.message);
+                }
+            }
+        };
 
         document.getElementById('formAdminProd').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = Date.now().toString();
-            await setDoc(doc(db, "produtos", id), {
+            
+            const novoProduto = {
                 id,
-                nome: document.getElementById('nome').value,
-                categoria: document.getElementById('cat').value,
-                preco: document.getElementById('preco').value,
-                f1: document.getElementById('f1').value,
-                f2: document.getElementById('f2').value
-            });
-            alert("Sucesso!");
+                nome: document.getElementById('adminNome').value,
+                categoria: document.getElementById('adminCategoria').value,
+                preco: document.getElementById('adminPreco').value,
+                f1: document.getElementById('adminF1').value,
+                f2: document.getElementById('adminF2').value || "",
+                f3: document.getElementById('adminF3').value || ""
+            };
+
+            try {
+                await setDoc(doc(db, "produtos", id), novoProduto);
+                document.getElementById('formAdminProd').reset();
+                alert("Produto salvo e publicado na vitrine!");
+            } catch (error) {
+                alert("Erro ao salvar produto: " + error.message);
+            }
         });
     </script>
 </body>
