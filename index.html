@@ -3,50 +3,68 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEW STYLE - Catálogo Digital</title>
+    <title>NEW STYLE - Catálogo Oficial</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&family=Inter:wght@400;600&display=swap" rel="stylesheet">
     <style>
-        :root { --cor-fundo: #0a0a0a; --cor-texto: #ffffff; --cor-destaque: #e60000; --cor-card: #1a1a1a; }
-        body { background-color: var(--cor-fundo); color: var(--cor-texto); font-family: 'Inter', sans-serif; margin: 0; padding: 0; }
-        header { background-color: #000; padding: 20px 5%; display: flex; justify-content: space-between; align-items: center; border-bottom: 3px solid var(--cor-destaque); }
-        .logo { font-family: 'DynaPuff', cursive; font-size: 2.5rem; color: var(--cor-destaque); margin: 0; text-shadow: 2px 2px 0px #000; }
-        button { background-color: var(--cor-destaque); color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; font-weight: bold; }
-        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .card-produto { background-color: var(--cor-card); border: 1px solid #333; border-radius: 12px; padding: 15px; text-align: center; }
-        .card-produto img { width: 100%; height: 200px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
-        .preco { color: var(--cor-destaque); font-size: 1.3rem; font-weight: bold; margin: 10px 0; }
-        #areaAdmin { display: none; background-color: #111; padding: 20px; margin: 20px; border: 2px solid var(--cor-destaque); border-radius: 15px; }
-        input, select { width: 100%; padding: 12px; background: #222; color: white; border: 1px solid #444; border-radius: 5px; margin-bottom: 10px; box-sizing: border-box; }
-        .admin-btns { display: none; margin-top: 10px; }
+        :root {
+            --fundo: #050505;
+            --header: #000000;
+            --card: #121212;
+            --texto: #ffffff;
+            --texto-sec: #bbbbbb;
+            --accent: #e60000;
+        }
+        body { background-color: var(--fundo); color: var(--texto); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 50px; }
+        
+        header { background-color: var(--header); padding: 20px; display: flex; align-items: center; border-bottom: 2px solid var(--accent); }
+        .logo { font-family: 'DynaPuff', cursive; font-size: 2rem; color: var(--accent); margin: 0 auto; text-shadow: 2px 2px 0px #000; }
+        
+        .filtros { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; }
+        button { background: var(--card); color: white; border: 1px solid #333; padding: 8px 15px; border-radius: 5px; cursor: pointer; transition: 0.3s; }
+        button.ativo { background: var(--accent); border-color: var(--accent); }
+
+        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--card); padding: 15px; border-radius: 12px; border: 1px solid #222; }
+        .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 8px; }
+        .miniaturas { display: flex; gap: 5px; margin: 10px 0; }
+        .miniaturas img { width: 30%; height: 60px; object-fit: cover; cursor: pointer; border-radius: 4px; }
+        
+        .preco { font-size: 1.4rem; font-weight: bold; color: var(--accent); margin: 10px 0; }
+        .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 5px; font-weight: bold; margin-top: 5px; }
+
+        #cart-bar { position: fixed; bottom: 0; width: 100%; background: var(--header); padding: 15px; text-align: center; border-top: 2px solid var(--accent); display: none; }
+        #areaAdmin { display: none; background: #1a1a1a; padding: 20px; margin: 20px; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo">NEW STYLE</h1>
-        <button onclick="window.acessarAdmin()">Admin</button>
+        <button onclick="window.acessarAdmin()" style="position:absolute; right: 20px; background: transparent; border: 1px solid #444;">Admin</button>
     </header>
 
     <div id="areaAdmin">
-        <h2>Gerenciar Produto</h2>
         <form id="formAdminProd">
-            <input type="text" id="adminProdNome" placeholder="Nome da Peça" required>
-            <select id="adminProdCategoria">
-                <option value="Camisa">Camisa</option><option value="Bermuda">Bermuda</option>
-                <option value="Short">Short</option><option value="Calça">Calça</option>
-                <option value="Jaqueta">Jaqueta</option><option value="Moletom">Moletom</option>
-                <option value="Perfumes">Perfumes</option><option value="Tênis">Tênis</option>
+            <input type="text" id="nome" placeholder="Nome" required style="width:100%; padding:10px; margin-bottom:5px;">
+            <select id="cat" style="width:100%; padding:10px; margin-bottom:5px;">
+                <option>Camisa</option><option>Bermuda</option><option>Tênis</option>
             </select>
-            <input type="number" id="adminProdPreco" placeholder="Preço" step="0.01" required>
-            <input type="url" id="adminProdF1" placeholder="Link da Foto 1" required>
-            <input type="url" id="adminProdF2" placeholder="Link da Foto 2">
-            <input type="url" id="adminProdF3" placeholder="Link da Foto 3">
-            <button type="submit">Salvar Produto</button>
-            <button type="button" onclick="window.fecharAdmin()" style="background:#444">Fechar</button>
+            <input type="number" id="preco" placeholder="Preço" required style="width:100%; padding:10px; margin-bottom:5px;">
+            <input type="url" id="f1" placeholder="Foto Principal" required style="width:100%; padding:10px; margin-bottom:5px;">
+            <input type="url" id="f2" placeholder="Foto 2" style="width:100%; padding:10px; margin-bottom:5px;">
+            <button type="submit" class="btn-acao">Salvar</button>
         </form>
     </div>
 
-    <div class="catalogo" id="vitrineProdutos"></div>
+    <div class="filtros" id="btnsFiltro">
+        <button class="ativo" onclick="window.filtrar('Todos')">Todos</button>
+    </div>
+
+    <div class="catalogo" id="vitrine"></div>
+
+    <div id="cart-bar">
+        <button onclick="window.finalizarPedido()" class="btn-acao" style="max-width: 300px;">Finalizar Pedido (WhatsApp)</button>
+    </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
@@ -62,57 +80,65 @@
             measurementId: "G-K7023PTGYY"
         };
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+        const db = getFirestore(initializeApp(firebaseConfig));
+        window.produtos = [];
+        window.carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
 
-        // Tempo Real
-        onSnapshot(collection(db, "produtos"), (snapshot) => {
-            const vitrine = document.getElementById('vitrineProdutos');
-            vitrine.innerHTML = '';
-            snapshot.forEach((doc) => {
-                const prod = doc.data();
-                vitrine.innerHTML += `
-                    <div class="card-produto">
-                        <img src="${prod.f1}" onerror="this.src='https://placehold.co/200x200?text=Sem+Foto'">
-                        <h3>${prod.nome}</h3>
-                        <div class="preco">R$ ${prod.preco}</div>
-                        <div class="admin-btns" id="btnDel-${prod.id}">
-                            <button onclick="window.excluir('${prod.id}')" style="background:var(--cor-destaque)">Excluir</button>
-                        </div>
-                    </div>`;
-            });
+        onSnapshot(collection(db, "produtos"), (snap) => {
+            window.produtos = [];
+            snap.forEach(d => window.produtos.push(d.data()));
+            window.renderizar(window.produtos);
         });
 
-        window.acessarAdmin = () => {
-            if (prompt("Senha do Admin:") === 'NEWSTYLE26') {
-                document.getElementById('areaAdmin').style.display = 'block';
-                document.querySelectorAll('.admin-btns').forEach(el => el.style.display = 'block');
-            } else alert("Senha incorreta!");
+        window.renderizar = (lista) => {
+            const vitrine = document.getElementById('vitrine');
+            vitrine.innerHTML = '';
+            lista.forEach(p => {
+                vitrine.innerHTML += `
+                    <div class="card">
+                        <img src="${p.f1}" id="imgMain-${p.id}">
+                        <div class="miniaturas">
+                            <img src="${p.f1}" onclick="document.getElementById('imgMain-${p.id}').src='${p.f1}'">
+                            ${p.f2 ? `<img src="${p.f2}" onclick="document.getElementById('imgMain-${p.id}').src='${p.f2}'">` : ''}
+                        </div>
+                        <h3>${p.nome}</h3>
+                        <div class="preco">R$ ${p.preco}</div>
+                        <button class="btn-acao" onclick="window.addCarrinho('${p.nome}', '${p.preco}')">Adicionar ao Carrinho</button>
+                    </div>`;
+            });
         };
 
-        window.fecharAdmin = () => {
-            document.getElementById('areaAdmin').style.display = 'none';
-            document.querySelectorAll('.admin-btns').forEach(el => el.style.display = 'none');
+        window.addCarrinho = (nome, preco) => {
+            window.carrinho.push({nome, preco});
+            localStorage.setItem('carrinho', JSON.stringify(window.carrinho));
+            document.getElementById('cart-bar').style.display = 'block';
+            alert(nome + " adicionado!");
         };
 
-        window.excluir = async (id) => {
-            if(confirm("Excluir este produto?")) await deleteDoc(doc(db, "produtos", String(id)));
+        window.finalizarPedido = () => {
+            const itens = window.carrinho.map(i => i.nome).join(', ');
+            window.location.href = `https://wa.me/5548999999999?text=Olá! Gostaria de comprar: ${itens}`;
         };
+
+        window.filtrar = (cat) => {
+            const filtrados = cat === 'Todos' ? window.produtos : window.produtos.filter(p => p.categoria === cat);
+            window.renderizar(filtrados);
+        };
+
+        window.acessarAdmin = () => { if(prompt("Senha:") === 'NEWSTYLE26') document.getElementById('areaAdmin').style.display = 'block'; }
 
         document.getElementById('formAdminProd').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = Date.now().toString();
             await setDoc(doc(db, "produtos", id), {
                 id,
-                nome: document.getElementById('adminProdNome').value,
-                categoria: document.getElementById('adminProdCategoria').value,
-                preco: document.getElementById('adminProdPreco').value,
-                f1: document.getElementById('adminProdF1').value,
-                f2: document.getElementById('adminProdF2').value,
-                f3: document.getElementById('adminProdF3').value
+                nome: document.getElementById('nome').value,
+                categoria: document.getElementById('cat').value,
+                preco: document.getElementById('preco').value,
+                f1: document.getElementById('f1').value,
+                f2: document.getElementById('f2').value
             });
-            document.getElementById('formAdminProd').reset();
-            alert("Produto cadastrado!");
+            alert("Sucesso!");
         });
     </script>
 </body>
