@@ -42,7 +42,7 @@
             backdrop-filter: blur(10px);
             box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
         }
-        /* Logo Solicitada: NEW vermelho, STYLE branco */
+        
         .logo { 
             font-family: 'DynaPuff', cursive; 
             font-size: 2.5rem; 
@@ -69,14 +69,20 @@
         }
         .btn-admin-topo:hover { background: rgba(255,255,255,0.2); color: white; }
 
-        /* Filtros Elegantes (Scroll Horizontal no Mobile) */
+        /* Ajuste para telas pequenas (Evita conflito da logo com o botão Admin) */
+        @media (max-width: 480px) {
+            .logo { font-size: 1.8rem; }
+            .btn-admin-topo { padding: 6px 10px; font-size: 0.75rem; right: 10px; }
+        }
+
+        /* Filtros Elegantes */
         .filtros-container {
             width: 100%;
             overflow-x: auto;
             padding: 20px 0;
-            scrollbar-width: none; /* Firefox */
+            scrollbar-width: none;
         }
-        .filtros-container::-webkit-scrollbar { display: none; /* Chrome */ }
+        .filtros-container::-webkit-scrollbar { display: none; }
         
         .filtros { 
             display: flex; 
@@ -203,17 +209,25 @@
         .btn-excluir { width: 100%; background: #fbeaea; color: #ff3333; border: 1px solid #ffcccc; padding: 10px; border-radius: 8px; cursor: pointer; font-weight: 700; transition: 0.2s; }
         .btn-excluir:hover { background: #ff3333; color: white; }
 
-        /* Área do Administrador Elegante */
+        /* --- ÁREA DO ADMIN (AGORA É UM MODAL FLUTUANTE) --- */
+        #modal-admin-overlay {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); z-index: 1000; backdrop-filter: blur(5px);
+            justify-content: center; align-items: center; padding: 20px; box-sizing: border-box;
+        }
+
         #areaAdmin { 
-            display: none; 
             background: rgba(20, 20, 20, 0.95); 
             padding: 30px; 
-            margin: 30px auto; 
             border-radius: 20px; 
+            width: 100%;
             max-width: 500px; 
             border: 1px solid rgba(255,255,255,0.1); 
             box-shadow: 0 15px 40px rgba(0,0,0,0.8); 
-            backdrop-filter: blur(10px);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+            overflow-y: auto;
         }
         #areaAdmin h2 { margin-top: 0; color: white; font-size: 1.5rem; text-align: center; margin-bottom: 25px;}
         #areaAdmin input, #areaAdmin select { 
@@ -230,7 +244,7 @@
         }
         #areaAdmin input:focus, #areaAdmin select:focus { outline: none; border-color: var(--accent); background: #000; }
 
-        /* --- NOVO SISTEMA DE CARRINHO (Barra Fixa e Modal) --- */
+        /* --- SISTEMA DE CARRINHO (Barra Fixa e Modal) --- */
         #cart-bar { 
             position: fixed; bottom: 0; left: 0; width: 100%; 
             background: var(--header); padding: 15px; text-align: center; 
@@ -241,7 +255,6 @@
         #cart-bar button { max-width: 400px; margin: 0 auto; background: white; color: black; box-shadow: 0 4px 15px rgba(255,255,255,0.2);}
         #cart-bar button:hover { background: #f0f0f0; }
 
-        /* Modal do Carrinho */
         #modal-carrinho {
             display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
             background: rgba(0,0,0,0.8); z-index: 1000; backdrop-filter: blur(5px);
@@ -296,28 +309,30 @@
 
     <div id="toast-container"></div>
 
-    <div id="areaAdmin">
-        <h2>Painel de Controle</h2>
-        <form id="formAdminProd">
-            <input type="text" id="adminNome" placeholder="Nome da Peça" required>
-            <select id="adminCategoria">
-                <option value="Camisa">Camisa</option>
-                <option value="Bermuda">Bermuda</option>
-                <option value="Calça">Calça</option>
-                <option value="Jaqueta">Jaqueta</option>
-                <option value="Moletom">Moletom</option>
-                <option value="Boné">Boné</option>
-                <option value="Tênis">Tênis</option>
-                <option value="Perfume">Perfume</option>
-                <option value="Conjuntos">Conjuntos</option>
-            </select>
-            <input type="number" id="adminPreco" placeholder="Preço (Ex: 89.90)" step="0.01" required>
-            <input type="url" id="adminF1" placeholder="Link da Foto 1 (Principal)" required>
-            <input type="url" id="adminF2" placeholder="Link da Foto 2 (Opcional)">
-            <input type="url" id="adminF3" placeholder="Link da Foto 3 (Opcional)">
-            <button type="submit" class="btn-acao">➕ Publicar Produto</button>
-            <button type="button" onclick="window.fecharAdmin()" style="background:rgba(255,255,255,0.1); width:100%; color:white; border:1px solid rgba(255,255,255,0.2); padding:14px; border-radius:10px; margin-top:10px; cursor:pointer; font-weight:bold; transition: 0.3s;">❌ Fechar Painel</button>
-        </form>
+    <div id="modal-admin-overlay">
+        <div id="areaAdmin">
+            <h2>Painel de Controle</h2>
+            <form id="formAdminProd">
+                <input type="text" id="adminNome" placeholder="Nome da Peça" required>
+                <select id="adminCategoria">
+                    <option value="Camisa">Camisa</option>
+                    <option value="Bermuda">Bermuda</option>
+                    <option value="Calça">Calça</option>
+                    <option value="Jaqueta">Jaqueta</option>
+                    <option value="Moletom">Moletom</option>
+                    <option value="Boné">Boné</option>
+                    <option value="Tênis">Tênis</option>
+                    <option value="Perfume">Perfume</option>
+                    <option value="Conjuntos">Conjuntos</option>
+                </select>
+                <input type="number" id="adminPreco" placeholder="Preço (Ex: 89.90)" step="0.01" required>
+                <input type="url" id="adminF1" placeholder="Link da Foto 1 (Principal)" required>
+                <input type="url" id="adminF2" placeholder="Link da Foto 2 (Opcional)">
+                <input type="url" id="adminF3" placeholder="Link da Foto 3 (Opcional)">
+                <button type="submit" class="btn-acao">➕ Publicar Produto</button>
+                <button type="button" onclick="window.fecharAdmin()" style="background:rgba(255,255,255,0.1); width:100%; color:white; border:1px solid rgba(255,255,255,0.2); padding:14px; border-radius:10px; margin-top:10px; cursor:pointer; font-weight:bold; transition: 0.3s;">❌ Fechar Painel</button>
+            </form>
+        </div>
     </div>
 
     <div class="filtros-container">
@@ -349,7 +364,7 @@
             <h2 style="margin-top: 0; color: #111;">🛍️ Seu Carrinho</h2>
             
             <div class="lista-carrinho" id="lista-carrinho">
-                </div>
+            </div>
             
             <div class="total-carrinho">
                 Total: <span style="color: var(--accent);" id="valor-total-carrinho">R$ 0,00</span>
@@ -365,7 +380,6 @@
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
         import { getFirestore, collection, onSnapshot, doc, setDoc, deleteDoc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
-        // Configuração mantida perfeitamente como você enviou
         const firebaseConfig = {
             apiKey: "AIzaSyAo9XY0ZVLsFtyxDfRUGSIcqZYpaWnfb9U",
             authDomain: "newstyle-catalogo.firebaseapp.com",
@@ -383,7 +397,6 @@
         window.modoAdminAtivo = false;
         window.categoriaAtual = 'Todos';
 
-        // Atualiza a barra de carrinho logo de início
         window.atualizarBarraCarrinho = () => {
             const barra = document.getElementById('cart-bar');
             const btnVer = document.getElementById('btn-ver-carrinho');
@@ -394,12 +407,11 @@
                 btnVer.innerHTML = `🛒 Ver Carrinho (${window.carrinho.length}) - R$ ${total.toFixed(2).replace('.',',')}`;
             } else {
                 barra.style.display = 'none';
-                window.fecharCarrinho(); // Fecha o modal se esvaziar
+                window.fecharCarrinho(); 
             }
         };
         window.atualizarBarraCarrinho();
 
-        // Notificação Elegante (Toast)
         window.mostrarToast = (mensagem) => {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
@@ -413,14 +425,12 @@
             }, 3000);
         };
 
-        // Sincronização em Tempo Real (Mantida intacta)
         onSnapshot(collection(db, "produtos"), (snap) => {
             window.produtos = [];
             snap.forEach(d => window.produtos.push(d.data()));
             window.renderizar();
         });
 
-        // Função para trocar imagem na vitrine com efeito
         window.trocarImagem = (idProd, urlImg, elementoThumb) => {
             const imgMain = document.getElementById(`imgMain-${idProd}`);
             imgMain.style.opacity = 0;
@@ -429,13 +439,11 @@
                 imgMain.style.opacity = 1;
             }, 150);
             
-            // Remove classe ativa das outras thumbs
             const thumbs = elementoThumb.parentElement.querySelectorAll('img');
             thumbs.forEach(t => t.classList.remove('ativa'));
             elementoThumb.classList.add('ativa');
         }
 
-        // Renderização da Vitrine Premium
         window.renderizar = () => {
             const vitrine = document.getElementById('vitrine');
             vitrine.innerHTML = '';
@@ -479,7 +487,6 @@
             });
         };
 
-        // Adicionar ao Carrinho (Melhorado)
         window.addCarrinho = (nome, preco) => {
             window.carrinho.push({ nome, preco: parseFloat(preco) });
             localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
@@ -487,7 +494,6 @@
             window.mostrarToast(`<b>${nome}</b> adicionado!`);
         };
 
-        // NOVO: Sistema de Remover do Carrinho
         window.removerItemCarrinho = (index) => {
             window.carrinho.splice(index, 1);
             localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
@@ -495,7 +501,6 @@
             window.atualizarBarraCarrinho();
         };
 
-        // Controle do Modal do Carrinho
         window.abrirCarrinho = () => {
             document.getElementById('modal-carrinho').style.display = 'flex';
             window.renderizarModalCarrinho();
@@ -526,7 +531,6 @@
             txtTotal.innerText = `R$ ${total.toFixed(2).replace('.', ',')}`;
         };
 
-        // Finalizar Pedido (Mantido e Melhorado)
         window.finalizarPedido = () => {
             if(window.carrinho.length === 0) return alert("Seu carrinho está vazio!");
             
@@ -541,18 +545,15 @@
             mensagem += `\n💰 *Valor Total:* R$ ${total.toFixed(2).replace('.', ',')}`;
             mensagem += `\n\nAguardando instruções de pagamento/entrega. Obrigado!`;
             
-            // Limpa o carrinho
             window.carrinho = [];
             localStorage.removeItem('newstyle_cart');
             window.atualizarBarraCarrinho();
             window.fecharCarrinho();
 
-            // Mantenha seu número real aqui!
             const seuNumeroWhatsApp = "5548992225893"; 
             window.location.href = `https://wa.me/${seuNumeroWhatsApp}?text=${encodeURIComponent(mensagem)}`;
         };
 
-        // Filtros (Mantidos)
         window.filtrar = (cat) => {
             window.categoriaAtual = cat;
             document.querySelectorAll('.filtros button').forEach(b => b.classList.remove('ativo'));
@@ -560,13 +561,13 @@
             window.renderizar();
         };
 
-        // Funções de Admin (Mantidas)
+        // NOVO: Funções de Admin Atualizadas para controlar o Modal Flutuante
         window.acessarAdmin = () => {
             if (prompt("🔒 Área Restrita.\nInsira a senha de administrador:") === 'NEWSTYLE26') {
                 window.modoAdminAtivo = true;
-                document.getElementById('areaAdmin').style.display = 'block';
+                // Agora abre o novo Modal de Overlay em vez de descer a página
+                document.getElementById('modal-admin-overlay').style.display = 'flex';
                 document.querySelectorAll('.admin-btns').forEach(el => el.style.display = 'block');
-                window.scrollTo({ top: 0, behavior: 'smooth' });
                 window.mostrarToast("Login Administrativo efetuado!");
             } else {
                 alert("❌ Senha incorreta!");
@@ -575,7 +576,8 @@
 
         window.fecharAdmin = () => {
             window.modoAdminAtivo = false;
-            document.getElementById('areaAdmin').style.display = 'none';
+            // Fecha o modal do painel
+            document.getElementById('modal-admin-overlay').style.display = 'none';
             document.querySelectorAll('.admin-btns').forEach(el => el.style.display = 'none');
         };
 
