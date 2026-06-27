@@ -1,81 +1,101 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEW STYLE - Catálogo Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
             --fundo: #050505; --surface: #111111; --accent: #e60000;
-            --text: #ffffff; --text-muted: #a0a0a0; --border: #222222;
+            --text: #ffffff; --border: #222222;
         }
-
         body { background-color: var(--fundo); color: var(--text); font-family: 'Outfit', sans-serif; margin: 0; padding-bottom: 100px; }
         
-        /* Header e Logo */
+        /* Cabeçalho com Logo Balão Centralizada */
         header { 
-            background: rgba(0,0,0,0.8); backdrop-filter: blur(10px); padding: 20px; 
-            display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border);
-            position: sticky; top: 0; z-index: 1000; padding: 15px 5%;
+            background: #000; padding: 20px; border-bottom: 2px solid var(--accent);
+            display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
         }
-        .logo { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin: 0; text-transform: uppercase; }
-        .btn-header { background: #222; color: white; border: none; padding: 10px 15px; border-radius: 8px; cursor: pointer; font-weight: 600; }
+        .logo { 
+            font-family: 'DynaPuff', cursive; font-size: 2.5rem; color: var(--accent); 
+            margin: 0; text-shadow: 2px 2px 0px #000; text-align: center;
+        }
+        .header-btns { display: flex; gap: 10px; margin-top: 10px; }
+        .btn-header { background: #222; color: white; border: 1px solid #444; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
 
-        /* Modal do Carrinho */
-        .modal-overlay { 
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%; 
-            background: rgba(0,0,0,0.9); display: none; z-index: 2000; justify-content: center; align-items: center; 
-        }
-        .modal-content { 
-            background: var(--surface); width: 90%; max-width: 400px; padding: 20px; 
-            border-radius: 20px; border: 1px solid var(--border); max-height: 80vh; overflow-y: auto;
-        }
-        .item-carrinho { 
-            display: flex; justify-content: space-between; align-items: center; 
-            padding: 10px 0; border-bottom: 1px solid #333; 
-        }
-        .btn-remover { color: var(--accent); cursor: pointer; font-weight: bold; padding: 5px; }
+        /* Filtros */
+        .filtros { display: flex; justify-content: center; gap: 8px; padding: 20px; flex-wrap: wrap; }
+        .filtros button { background: var(--surface); color: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
+        .filtros button.ativo { background: var(--accent); border-color: var(--accent); }
 
-        /* Vitrine e Cards */
-        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: #161616; border-radius: 16px; border: 1px solid var(--border); padding: 15px; transition: 0.3s; }
-        .card img { width: 100%; height: 200px; object-fit: cover; border-radius: 10px; }
-        .preco { font-size: 1.3rem; font-weight: bold; color: var(--accent); margin: 10px 0; }
+        /* Vitrine e Carrossel */
+        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: #161616; border-radius: 16px; padding: 15px; border: 1px solid var(--border); }
+        .foto-principal { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
+        .miniaturas { display: flex; gap: 5px; margin-bottom: 10px; }
+        .miniaturas img { width: 30%; height: 60px; object-fit: cover; cursor: pointer; border-radius: 5px; border: 1px solid #444; }
+        .preco { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
         .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
-        
-        #areaAdmin { display: none; background: #0f0f0f; padding: 20px; margin: 20px auto; border-radius: 15px; max-width: 400px; border: 1px solid var(--accent); }
-        input, select { width: 100%; padding: 10px; background: #222; color: white; border: 1px solid #333; border-radius: 6px; margin-bottom: 10px; box-sizing: border-box; }
+
+        /* Modal Carrinho e Admin */
+        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:none; z-index:2000; justify-content:center; align-items:center; }
+        .modal-content { background:var(--surface); width:90%; max-width:400px; padding:20px; border-radius:20px; }
+        input, select { width:100%; padding:10px; background:#222; color:white; border:1px solid #333; border-radius:6px; margin-bottom:10px; box-sizing:border-box; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo">NEW STYLE</h1>
-        <div>
+        <div class="header-btns">
             <button onclick="window.acessarAdmin()" class="btn-header">Admin</button>
-            <button onclick="window.abrirCarrinho()" class="btn-header" style="background: var(--accent);">Carrinho</button>
+            <button onclick="window.abrirCarrinho()" class="btn-header" style="border-color:var(--accent)">Carrinho</button>
         </div>
     </header>
 
+    <!-- Modal Carrinho -->
     <div id="modalCarrinho" class="modal-overlay">
         <div class="modal-content">
-            <h2 style="margin-top:0;">Seu Carrinho</h2>
+            <h2>Seu Carrinho</h2>
             <div id="lista-carrinho"></div>
-            <h3 id="total-carrinho" style="text-align: right;">Total: R$ 0,00</h3>
-            <button onclick="window.finalizarPedido()" class="btn-acao">Finalizar Pedido (WhatsApp)</button>
+            <h3 id="total-carrinho">Total: R$ 0,00</h3>
+            <button onclick="window.finalizarPedido()" class="btn-acao">Finalizar no WhatsApp</button>
             <button onclick="window.fecharCarrinho()" style="background:none; border:none; color:#666; width:100%; margin-top:10px; cursor:pointer;">Fechar</button>
         </div>
     </div>
 
-    <div id="areaAdmin">
-        <h3>Painel Admin</h3>
+    <!-- Admin -->
+    <div id="areaAdmin" style="display:none; max-width:400px; margin: 20px auto; padding:20px; border:1px solid var(--accent); border-radius:15px;">
+        <h3>Cadastrar Produto</h3>
         <form id="formAdminProd">
             <input type="text" id="adminNome" placeholder="Nome" required>
-            <input type="number" id="adminPreco" placeholder="Preço" required>
+            <select id="adminCategoria">
+                <option value="Camisa">Camisa</option><option value="Bermuda">Bermuda</option>
+                <option value="Calça">Calça</option><option value="Jaqueta">Jaqueta</option>
+                <option value="Moletom">Moletom</option><option value="Boné">Boné</option>
+                <option value="Tênis">Tênis</option><option value="Perfume">Perfume</option>
+                <option value="Conjuntos">Conjuntos</option>
+            </select>
+            <input type="number" id="adminPreco" placeholder="Preço" step="0.01" required>
             <input type="url" id="adminF1" placeholder="Foto 1" required>
+            <input type="url" id="adminF2" placeholder="Foto 2">
+            <input type="url" id="adminF3" placeholder="Foto 3">
             <button type="submit" class="btn-acao">Salvar Produto</button>
         </form>
+    </div>
+
+    <div class="filtros" id="btnsFiltro">
+        <button class="ativo" onclick="window.filtrar('Todos', this)">Todos</button>
+        <button onclick="window.filtrar('Camisa', this)">Camisas</button>
+        <button onclick="window.filtrar('Bermuda', this)">Bermudas</button>
+        <button onclick="window.filtrar('Calça', this)">Calças</button>
+        <button onclick="window.filtrar('Jaqueta', this)">Jaquetas</button>
+        <button onclick="window.filtrar('Moletom', this)">Moletons</button>
+        <button onclick="window.filtrar('Boné', this)">Bonés</button>
+        <button onclick="window.filtrar('Tênis', this)">Tênis</button>
+        <button onclick="window.filtrar('Perfume', this)">Perfumes</button>
+        <button onclick="window.filtrar('Conjuntos', this)">Conjuntos</button>
     </div>
 
     <div class="catalogo" id="vitrine"></div>
@@ -98,32 +118,56 @@
         
         window.carrinho = JSON.parse(localStorage.getItem('newstyle_cart')) || [];
         window.produtos = [];
+        window.categoriaAtual = 'Todos';
+        window.modoAdmin = false;
 
-        // Renderização Inicial
         onSnapshot(collection(db, "produtos"), (snap) => {
             window.produtos = [];
             snap.forEach(d => window.produtos.push(d.data()));
             renderizarVitrine();
         });
 
-        // --- Funções do Carrinho ---
+        window.renderizarVitrine = () => {
+            const vitrine = document.getElementById('vitrine');
+            vitrine.innerHTML = '';
+            const lista = window.categoriaAtual === 'Todos' ? window.produtos : window.produtos.filter(p => p.categoria === window.categoriaAtual);
+            
+            lista.forEach(p => {
+                let mini = `<img src="${p.f1}" onclick="document.getElementById('main-${p.id}').src='${p.f1}'">`;
+                if(p.f2) mini += `<img src="${p.f2}" onclick="document.getElementById('main-${p.id}').src='${p.f2}'">`;
+                if(p.f3) mini += `<img src="${p.f3}" onclick="document.getElementById('main-${p.id}').src='${p.f3}'">`;
+
+                vitrine.innerHTML += `
+                    <div class="card">
+                        <img src="${p.f1}" class="foto-principal" id="main-${p.id}">
+                        <div class="miniaturas">${mini}</div>
+                        <h3>${p.nome}</h3>
+                        <div class="preco">R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')}</div>
+                        <button class="btn-acao" onclick="window.addCarrinho('${p.nome}', '${p.preco}')">Adicionar</button>
+                        ${window.modoAdmin ? `<button onclick="window.excluir('${p.id}')" style="margin-top:10px; width:100%; background:none; border:1px solid #444; color:red; padding:5px; cursor:pointer;">Excluir</button>` : ''}
+                    </div>
+                `;
+            });
+        };
+
+        window.filtrar = (cat, btn) => {
+            window.categoriaAtual = cat;
+            document.querySelectorAll('.filtros button').forEach(b => b.classList.remove('ativo'));
+            btn.classList.add('ativo');
+            renderizarVitrine();
+        };
+
         window.abrirCarrinho = () => { document.getElementById('modalCarrinho').style.display = 'flex'; renderizarCarrinho(); };
         window.fecharCarrinho = () => { document.getElementById('modalCarrinho').style.display = 'none'; };
-
+        
         window.renderizarCarrinho = () => {
             const lista = document.getElementById('lista-carrinho');
             const totalEl = document.getElementById('total-carrinho');
             lista.innerHTML = '';
             let total = 0;
-
             window.carrinho.forEach((item, index) => {
                 total += parseFloat(item.preco);
-                lista.innerHTML += `
-                    <div class="item-carrinho">
-                        <span>${item.nome} - R$ ${parseFloat(item.preco).toFixed(2).replace('.',',')}</span>
-                        <span class="btn-remover" onclick="window.removerItem(${index})">X</span>
-                    </div>
-                `;
+                lista.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">${item.nome} <span>R$ ${parseFloat(item.preco).toFixed(2).replace('.',',')} <button onclick="window.removerItem(${index})" style="background:none; border:none; color:red; cursor:pointer;">X</button></span></div>`;
             });
             totalEl.innerText = `Total: R$ ${total.toFixed(2).replace('.',',')}`;
         };
@@ -137,41 +181,28 @@
         window.addCarrinho = (nome, preco) => {
             window.carrinho.push({ nome, preco: parseFloat(preco) });
             localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
-            alert(`${nome} adicionado!`);
+            alert("Adicionado ao carrinho!");
         };
 
         window.finalizarPedido = () => {
             if(window.carrinho.length === 0) return alert("Carrinho vazio!");
-            let msg = "Olá, gostaria de fazer o pedido:\n";
+            let msg = "Pedido NEW STYLE:\n";
             let total = 0;
-            window.carrinho.forEach(i => { msg += `- ${i.nome}: R$ ${i.preco}\n`; total += i.preco; });
+            window.carrinho.forEach(i => { msg += `- ${i.nome}: R$ ${i.preco.toFixed(2)}\n`; total += i.preco; });
             msg += `\nTotal: R$ ${total.toFixed(2)}`;
-            
-            // Redirecionamento corrigido
-            const url = `https://wa.me/5548992225893?text=${encodeURIComponent(msg)}`;
-            window.open(url, '_blank');
+            window.open(`https://wa.me/5548992225893?text=${encodeURIComponent(msg)}`, '_blank');
         };
-
-        // --- Funções Vitrine ---
-        function renderizarVitrine() {
-            const vitrine = document.getElementById('vitrine');
-            vitrine.innerHTML = '';
-            window.produtos.forEach(p => {
-                vitrine.innerHTML += `
-                    <div class="card">
-                        <img src="${p.f1}">
-                        <h3>${p.nome}</h3>
-                        <div class="preco">R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')}</div>
-                        <button class="btn-acao" onclick="window.addCarrinho('${p.nome}', '${p.preco}')">Adicionar</button>
-                    </div>
-                `;
-            });
-        }
 
         window.acessarAdmin = () => {
             if (prompt("Senha:") === 'NEWSTYLE26') {
+                window.modoAdmin = true;
                 document.getElementById('areaAdmin').style.display = 'block';
+                renderizarVitrine();
             }
+        };
+
+        window.excluir = async (id) => {
+            if(confirm("Excluir este produto?")) await deleteDoc(doc(db, "produtos", id));
         };
 
         document.getElementById('formAdminProd').addEventListener('submit', async (e) => {
@@ -179,10 +210,14 @@
             const id = Date.now().toString();
             await setDoc(doc(db, "produtos", id), {
                 id, nome: document.getElementById('adminNome').value,
+                categoria: document.getElementById('adminCategoria').value,
                 preco: document.getElementById('adminPreco').value,
-                f1: document.getElementById('adminF1').value
+                f1: document.getElementById('adminF1').value,
+                f2: document.getElementById('adminF2').value || "",
+                f3: document.getElementById('adminF3').value || ""
             });
-            alert("Salvo!");
+            alert("Produto cadastrado!");
+            document.getElementById('formAdminProd').reset();
         });
     </script>
 </body>
