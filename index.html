@@ -1,68 +1,85 @@
-<!DOCTYPE html>
+<<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>NEW STYLE - Catálogo Oficial</title>
+    <title>NEW STYLE - Catálogo Completo</title>
     <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --fundo: #0a0a0a;
-            --header: rgba(0, 0, 0, 0.95);
-            --card-fundo: #ffffff; 
-            --card-texto: #1a1a1a;
-            --texto-claro: #ffffff;
-            --accent: #e60000;
-        }
-
-        body { background-color: var(--fundo); color: var(--texto-claro); font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 150px; }
+        :root { --fundo: #0a0a0a; --header: rgba(0, 0, 0, 0.95); --card-fundo: #ffffff; --card-texto: #1a1a1a; --accent: #e60000; }
+        body { background-color: var(--fundo); color: #fff; font-family: 'Inter', sans-serif; margin: 0; padding-bottom: 150px; }
         
-        header { background-color: var(--header); padding: 20px; display: flex; align-items: center; justify-content: center; position: sticky; top: 0; z-index: 900; border-bottom: 2px solid var(--accent); }
-        .logo { font-family: 'DynaPuff', cursive; font-size: 2.5rem; margin: 0; color: white; }
+        header { background-color: var(--header); padding: 20px; text-align: center; position: sticky; top: 0; z-index: 900; border-bottom: 2px solid var(--accent); }
+        .logo { font-family: 'DynaPuff', cursive; color: white; margin: 0; }
         .logo-new { color: var(--accent); }
 
-        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: var(--card-fundo); color: var(--card-texto); padding: 20px; border-radius: 20px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); }
-        .card img { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; }
-        .preco { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
-        .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
-
-        /* Estilo do Carrinho */
-        #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: #1a1a1a; border-top: 3px solid var(--accent); z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); display: none; }
-
-        #modal-carrinho { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
-        .modal-content { background: #fff; color: #000; width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; }
+        /* Filtros */
+        .filtros { display: flex; justify-content: center; gap: 10px; padding: 20px; flex-wrap: wrap; }
+        .btn-filtro { background: #333; color: white; border: none; padding: 10px 20px; border-radius: 20px; cursor: pointer; }
         
-        /* Layout 3 em 3 do Carrinho */
-        #lista-carrinho { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        /* Catalogo */
+        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; padding: 20px; max-width: 1200px; margin: 0 auto; }
+        .card { background: var(--card-fundo); color: var(--card-texto); padding: 20px; border-radius: 20px; }
+        
+        /* Carrossel */
+        .carousel { position: relative; height: 250px; overflow: hidden; border-radius: 10px; }
+        .carousel img { width: 100%; height: 100%; object-fit: cover; display: none; }
+        .carousel img.active { display: block; }
+        .nav-c { position: absolute; bottom: 10px; left: 0; width: 100%; display: flex; justify-content: center; gap: 5px; }
+        .dot { width: 10px; height: 10px; background: white; border-radius: 50%; cursor: pointer; }
+
+        .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
+        
+        /* Carrinho */
+        #cart-bar { position: fixed; bottom: 0; width: 100%; padding: 20px; background: #1a1a1a; border-top: 3px solid var(--accent); z-index: 9999; display: none; }
+        #modal-carrinho { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; padding: 20px; overflow-y: auto; justify-content: center; }
+        .modal-content { background: #fff; color: #000; width: 100%; max-width: 600px; padding: 20px; border-radius: 20px; }
+        #lista-carrinho { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
         .item-cart { border: 1px solid #ccc; padding: 5px; border-radius: 8px; text-align: center; }
-        .item-cart img { width: 100%; height: 60px; object-fit: cover; border-radius: 5px; }
+        .item-cart img { width: 100%; height: 60px; object-fit: cover; }
+        
+        /* ADM */
+        .admin-box { background: #222; padding: 20px; margin: 20px; border-radius: 10px; }
     </style>
 </head>
 <body>
 
     <header>
         <h1 class="logo"><span class="logo-new">NEW</span> STYLE</h1>
+        <button onclick="document.getElementById('adm-panel').style.display='block'" style="background:transparent; border:none; color:#666; cursor:pointer;">ADM</button>
     </header>
+
+    <div class="filtros">
+        <button class="btn-filtro" onclick="filtrar('todos')">Todos</button>
+        <button class="btn-filtro" onclick="filtrar('camisa')">Camisas</button>
+        <button class="btn-filtro" onclick="filtrar('tenis')">Tênis</button>
+    </div>
+
+    <div id="adm-panel" class="admin-box" style="display:none;">
+        <h3>Painel ADM</h3>
+        <input id="nome" placeholder="Nome"> <input id="preco" placeholder="Preço"> <input id="cat" placeholder="Categoria">
+        <input id="f1" placeholder="Foto 1"> <input id="f2" placeholder="Foto 2"> <input id="f3" placeholder="Foto 3">
+        <button onclick="adicionarProduto()" class="btn-acao">Adicionar Produto</button>
+    </div>
 
     <div class="catalogo" id="vitrine"></div>
 
     <div id="cart-bar">
-        <button onclick="window.abrirCarrinho()" class="btn-acao">🛒 Ver Carrinho</button>
+        <button onclick="window.abrirCarrinho()" class="btn-acao" style="max-width: 400px; margin: 0 auto; display: block;">🛒 Ver Carrinho</button>
     </div>
 
     <div id="modal-carrinho" onclick="window.fecharCarrinho()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2>Seu Carrinho</h2>
+            <h2>🛍️ Seu Carrinho</h2>
             <div id="lista-carrinho"></div>
-            <div id="total-carrinho" style="font-weight: bold; font-size: 1.2rem; margin-top: 15px;"></div>
-            <button onclick="window.finalizarPedido()" class="btn-acao" style="margin-top:20px; background: #25d366;">Finalizar (WhatsApp)</button>
+            <div id="total-carrinho" style="font-weight:bold; font-size:1.2rem; margin-top:15px;"></div>
+            <button onclick="window.finalizarPedido()" class="btn-acao" style="background:#25d366;">Finalizar no WhatsApp 💬</button>
         </div>
     </div>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-app.js";
-        import { getFirestore, collection, onSnapshot } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
+        import { getFirestore, collection, onSnapshot, addDoc, deleteDoc, doc } from "https://www.gstatic.com/firebasejs/12.14.0/firebase-firestore.js";
 
         const firebaseConfig = {
             apiKey: "AIzaSyAo9XY0ZVLsFtyxDfRUGSIcqZYpaWnfb9U",
@@ -74,65 +91,90 @@
         };
 
         const db = getFirestore(initializeApp(firebaseConfig));
+        window.produtos = [];
         window.carrinho = JSON.parse(localStorage.getItem('newstyle_cart')) || [];
 
-        window.atualizarBarra = () => {
-            const bar = document.getElementById('cart-bar');
-            bar.style.display = window.carrinho.length > 0 ? 'block' : 'none';
+        // ADM
+        window.adicionarProduto = async () => {
+            await addDoc(collection(db, "produtos"), {
+                nome: document.getElementById('nome').value,
+                preco: document.getElementById('preco').value,
+                cat: document.getElementById('cat').value,
+                f1: document.getElementById('f1').value, f2: document.getElementById('f2').value, f3: document.getElementById('f3').value
+            });
+            alert('Adicionado!');
         };
 
-        // Adiciona foto no carrinho para exibir corretamente
+        window.remover = async (id) => { await deleteDoc(doc(db, "produtos", id)); };
+
+        // Filtro
+        window.filtrar = (c) => {
+            renderizar(c === 'todos' ? window.produtos : window.produtos.filter(p => p.cat === c));
+        };
+
+        // Render
+        const renderizar = (lista) => {
+            const v = document.getElementById('vitrine');
+            v.innerHTML = '';
+            lista.forEach(p => {
+                v.innerHTML += `
+                    <div class="card">
+                        <div class="carousel" id="c-${p.id}">
+                            <img src="${p.f1}" class="active">
+                            <img src="${p.f2}">
+                            <img src="${p.f3}">
+                        </div>
+                        <h3>${p.nome}</h3>
+                        <p class="preco">R$ ${p.preco}</p>
+                        <button class="btn-acao" onclick="window.add('${p.nome}', '${p.preco}', '${p.f1}')">Adicionar</button>
+                        <button onclick="window.remover('${p.id}')" style="background:none; border:none; color:red; cursor:pointer; margin-top:5px;">Excluir</button>
+                    </div>`;
+            });
+        };
+
+        // Carrossel Simples (clique na imagem)
+        document.addEventListener('click', (e) => {
+            if(e.target.tagName === 'IMG' && e.target.parentElement.classList.contains('carousel')) {
+                const imgs = e.target.parentElement.querySelectorAll('img');
+                let idx = Array.from(imgs).indexOf(e.target);
+                imgs.forEach(i => i.classList.remove('active'));
+                imgs[(idx + 1) % imgs.length].classList.add('active');
+            }
+        });
+
+        // Carrinho
         window.add = (nome, preco, foto) => {
             window.carrinho.push({ nome, preco, foto });
             localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
             window.atualizarBarra();
         };
 
+        window.atualizarBarra = () => {
+            document.getElementById('cart-bar').style.display = window.carrinho.length > 0 ? 'block' : 'none';
+        };
+
         window.abrirCarrinho = () => {
             document.getElementById('modal-carrinho').style.display = 'flex';
-            const lista = document.getElementById('lista-carrinho');
-            const totalDiv = document.getElementById('total-carrinho');
-            let total = 0;
-            
-            lista.innerHTML = '';
-            window.carrinho.forEach((item, index) => {
+            let total = 0, html = '';
+            window.carrinho.forEach((item, i) => {
                 total += parseFloat(item.preco);
-                lista.innerHTML += `
-                    <div class="item-cart">
-                        <img src="${item.foto}">
-                        <div style="font-size: 0.7rem;">${item.nome}</div>
-                        <div style="font-weight:bold;">R$ ${item.preco}</div>
-                    </div>`;
+                html += `<div class="item-cart"><img src="${item.foto}"><p>${item.nome}</p><b>R$ ${item.preco}</b></div>`;
             });
-            totalDiv.innerText = "Total: R$ " + total.toFixed(2);
+            document.getElementById('lista-carrinho').innerHTML = html;
+            document.getElementById('total-carrinho').innerText = `Total: R$ ${total.toFixed(2)}`;
         };
 
         window.fecharCarrinho = () => document.getElementById('modal-carrinho').style.display = 'none';
 
         window.finalizarPedido = () => {
-            let total = 0;
-            const itens = window.carrinho.map(i => {
-                total += parseFloat(i.preco);
-                return `${i.nome} (R$ ${i.preco})`;
-            }).join(', ');
-            
-            const msg = `Pedido: ${itens}. Total: R$ ${total.toFixed(2)}`;
-            window.location.href = `https://wa.me/5548992225893?text=${encodeURIComponent(msg)}`;
+            const txt = window.carrinho.map(i => i.nome).join(', ');
+            window.location.href = `https://wa.me/5548992225893?text=Pedido: ${txt}`;
         };
 
         onSnapshot(collection(db, "produtos"), (s) => {
-            const v = document.getElementById('vitrine');
-            v.innerHTML = '';
-            s.forEach(d => {
-                const p = d.data();
-                v.innerHTML += `
-                    <div class="card">
-                        <img src="${p.f1}">
-                        <h3>${p.nome}</h3>
-                        <p class="preco">R$ ${p.preco}</p>
-                        <button class="btn-acao" onclick="window.add('${p.nome}', '${p.preco}', '${p.f1}')">Adicionar</button>
-                    </div>`;
-            });
+            window.produtos = [];
+            s.forEach(d => window.produtos.push({ ...d.data(), id: d.id }));
+            renderizar(window.produtos);
         });
 
         window.atualizarBarra();
