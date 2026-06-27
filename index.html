@@ -1,4 +1,4 @@
-<<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -27,17 +27,16 @@
         .preco { font-size: 1.5rem; font-weight: 800; color: var(--accent); }
         .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 15px; border-radius: 10px; font-weight: 700; cursor: pointer; margin-top: 10px; }
 
-        /* Barra do Carrinho */
+        /* Estilo do Carrinho */
         #cart-bar { position: fixed; bottom: 0; left: 0; width: 100%; padding: 20px; background: #1a1a1a; border-top: 3px solid var(--accent); z-index: 9999; box-shadow: 0 -5px 20px rgba(0,0,0,0.5); display: none; }
 
-        /* Modal do Carrinho */
-        #modal-carrinho { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 99999; justify-content: center; align-items: center; padding: 20px; }
-        .modal-content { background: #fff; color: #000; width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; max-height: 80vh; overflow-y: auto; }
+        #modal-carrinho { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 99999; justify-content: center; align-items: center; padding: 20px; overflow-y: auto; }
+        .modal-content { background: #fff; color: #000; width: 100%; max-width: 600px; padding: 25px; border-radius: 20px; }
         
-        /* Grid do Carrinho 3 em 3 */
-        .carrinho-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px 0; }
-        .item-carrinho { border: 1px solid #ddd; padding: 10px; border-radius: 10px; text-align: center; }
-        .item-carrinho img { width: 100%; height: 80px; object-fit: cover; border-radius: 5px; }
+        /* Layout 3 em 3 do Carrinho */
+        #lista-carrinho { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 15px; }
+        .item-cart { border: 1px solid #ccc; padding: 5px; border-radius: 8px; text-align: center; }
+        .item-cart img { width: 100%; height: 60px; object-fit: cover; border-radius: 5px; }
     </style>
 </head>
 <body>
@@ -49,15 +48,15 @@
     <div class="catalogo" id="vitrine"></div>
 
     <div id="cart-bar">
-        <button onclick="window.abrirCarrinho()" class="btn-acao" style="max-width: 400px; display: block; margin: 0 auto;">🛒 Ver Carrinho</button>
+        <button onclick="window.abrirCarrinho()" class="btn-acao">🛒 Ver Carrinho</button>
     </div>
 
     <div id="modal-carrinho" onclick="window.fecharCarrinho()">
         <div class="modal-content" onclick="event.stopPropagation()">
-            <h2>🛍️ Seu Carrinho</h2>
-            <div id="lista-carrinho" class="carrinho-grid"></div>
-            <div id="total-carrinho" style="font-size: 1.5rem; font-weight: bold; text-align: right; margin-top: 20px;"></div>
-            <button onclick="window.finalizarPedido()" class="btn-acao" style="background: #25D366;">Finalizar no WhatsApp 💬</button>
+            <h2>Seu Carrinho</h2>
+            <div id="lista-carrinho"></div>
+            <div id="total-carrinho" style="font-weight: bold; font-size: 1.2rem; margin-top: 15px;"></div>
+            <button onclick="window.finalizarPedido()" class="btn-acao" style="margin-top:20px; background: #25d366;">Finalizar (WhatsApp)</button>
         </div>
     </div>
 
@@ -75,7 +74,6 @@
         };
 
         const db = getFirestore(initializeApp(firebaseConfig));
-        window.produtos = []; 
         window.carrinho = JSON.parse(localStorage.getItem('newstyle_cart')) || [];
 
         window.atualizarBarra = () => {
@@ -83,6 +81,7 @@
             bar.style.display = window.carrinho.length > 0 ? 'block' : 'none';
         };
 
+        // Adiciona foto no carrinho para exibir corretamente
         window.add = (nome, preco, foto) => {
             window.carrinho.push({ nome, preco, foto });
             localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
@@ -96,36 +95,28 @@
             let total = 0;
             
             lista.innerHTML = '';
-            window.carrinho.forEach((item, i) => {
+            window.carrinho.forEach((item, index) => {
                 total += parseFloat(item.preco);
                 lista.innerHTML += `
-                    <div class="item-carrinho">
+                    <div class="item-cart">
                         <img src="${item.foto}">
-                        <p style="font-size: 0.8rem; margin:5px 0;">${item.nome}</p>
-                        <p style="font-weight:bold;">R$ ${item.preco}</p>
-                        <button onclick="window.remover(${i})" style="background:red; color:white; border:none; padding:5px; border-radius:5px; cursor:pointer;">X</button>
+                        <div style="font-size: 0.7rem;">${item.nome}</div>
+                        <div style="font-weight:bold;">R$ ${item.preco}</div>
                     </div>`;
             });
-            totalDiv.innerText = `Total: R$ ${total.toFixed(2)}`;
-        };
-
-        window.remover = (i) => {
-            window.carrinho.splice(i, 1);
-            localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
-            window.abrirCarrinho(); 
-            window.atualizarBarra();
+            totalDiv.innerText = "Total: R$ " + total.toFixed(2);
         };
 
         window.fecharCarrinho = () => document.getElementById('modal-carrinho').style.display = 'none';
 
         window.finalizarPedido = () => {
             let total = 0;
-            const lista = window.carrinho.map(item => {
-                total += parseFloat(item.preco);
-                return `\n• ${item.nome} (R$ ${item.preco})`;
-            }).join('');
+            const itens = window.carrinho.map(i => {
+                total += parseFloat(i.preco);
+                return `${i.nome} (R$ ${i.preco})`;
+            }).join(', ');
             
-            const msg = `Olá! Gostaria de finalizar meu pedido na NEW STYLE:${lista}\n\n*Total: R$ ${total.toFixed(2)}*\n\nAguardando confirmação!`;
+            const msg = `Pedido: ${itens}. Total: R$ ${total.toFixed(2)}`;
             window.location.href = `https://wa.me/5548992225893?text=${encodeURIComponent(msg)}`;
         };
 
@@ -134,13 +125,12 @@
             v.innerHTML = '';
             s.forEach(d => {
                 const p = d.data();
-                window.produtos.push(p);
                 v.innerHTML += `
                     <div class="card">
                         <img src="${p.f1}">
                         <h3>${p.nome}</h3>
                         <p class="preco">R$ ${p.preco}</p>
-                        <button class="btn-acao" onclick="window.add('${p.nome}', '${p.preco}', '${p.f1}')">Adicionar ao Carrinho</button>
+                        <button class="btn-acao" onclick="window.add('${p.nome}', '${p.preco}', '${p.f1}')">Adicionar</button>
                     </div>`;
             });
         });
