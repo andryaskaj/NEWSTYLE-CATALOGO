@@ -4,44 +4,334 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NEW STYLE - Catálogo Oficial</title>
-    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&family=Outfit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DynaPuff:wght@700&family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --fundo: #050505; --surface: #111111; --accent: #e60000;
-            --text: #ffffff; --border: #222222;
+            --fundo: #0a0a0a;
+            --surface: #141414;
+            --surface-hover: #1c1c1c;
+            --accent: #e60000;
+            --accent-glow: rgba(230, 0, 0, 0.4);
+            --text: #ffffff;
+            --text-muted: #a0a0a0;
+            --border: #262626;
+            --glass: rgba(20, 20, 20, 0.85);
         }
-        body { background-color: var(--fundo); color: var(--text); font-family: 'Outfit', sans-serif; margin: 0; padding-bottom: 100px; }
+
+        /* Reset e Scrollbar Premium */
+        * { box-sizing: border-box; transition: all 0.25s ease; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--fundo); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--accent); }
+
+        body { 
+            background-color: var(--fundo); 
+            color: var(--text); 
+            font-family: 'Outfit', sans-serif; 
+            margin: 0; 
+            padding-bottom: 120px;
+            overflow-x: hidden;
+        }
         
-        /* Cabeçalho com Logo Balão Centralizada */
+        /* Cabeçalho Magnético */
         header { 
-            background: #000; padding: 20px; border-bottom: 2px solid var(--accent);
-            display: flex; flex-direction: column; align-items: center; justify-content: center; position: relative;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(12px);
+            padding: 25px 20px; 
+            border-bottom: 1px solid var(--border);
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: center; 
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 30px rgba(0,0,0,0.5);
         }
         .logo { 
-            font-family: 'DynaPuff', cursive; font-size: 2.5rem; color: var(--accent); 
-            margin: 0; text-shadow: 2px 2px 0px #000; text-align: center;
+            font-family: 'DynaPuff', cursive; 
+            font-size: 2.8rem; 
+            color: var(--accent); 
+            margin: 0 0 15px 0; 
+            text-shadow: 0 0 20px var(--accent-glow);
+            letter-spacing: 1px;
         }
-        .header-btns { display: flex; gap: 10px; margin-top: 10px; }
-        .btn-header { background: #222; color: white; border: 1px solid #444; padding: 8px 15px; border-radius: 8px; cursor: pointer; font-size: 0.8rem; }
+        .header-btns { display: flex; gap: 12px; width: 100%; max-width: 400px; }
+        .btn-header { 
+            flex: 1;
+            background: var(--surface); 
+            color: white; 
+            border: 1px solid var(--border); 
+            padding: 12px; 
+            border-radius: 12px; 
+            cursor: pointer; 
+            font-size: 0.9rem; 
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        .btn-header:hover {
+            background: var(--surface-hover);
+            border-color: #444;
+            transform: translateY(-2px);
+        }
 
-        /* Filtros */
-        .filtros { display: flex; justify-content: center; gap: 8px; padding: 20px; flex-wrap: wrap; }
-        .filtros button { background: var(--surface); color: white; border: 1px solid var(--border); padding: 8px 16px; border-radius: 20px; cursor: pointer; transition: 0.3s; }
-        .filtros button.ativo { background: var(--accent); border-color: var(--accent); }
+        /* Botão Flutuante do Carrinho para Mobile */
+        .cart-fab {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--accent);
+            color: white;
+            border: none;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            box-shadow: 0 8px 25px var(--accent-glow);
+            cursor: pointer;
+            z-index: 999;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+        .cart-fab:hover { transform: scale(1.1) rotate(-5deg); }
+        .cart-count-badge {
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            background: white;
+            color: black;
+            font-size: 0.75rem;
+            font-weight: 800;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-        /* Vitrine e Carrossel */
-        .catalogo { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 25px; padding: 20px; max-width: 1200px; margin: 0 auto; }
-        .card { background: #161616; border-radius: 16px; padding: 15px; border: 1px solid var(--border); }
-        .foto-principal { width: 100%; height: 250px; object-fit: cover; border-radius: 10px; margin-bottom: 10px; }
-        .miniaturas { display: flex; gap: 5px; margin-bottom: 10px; }
-        .miniaturas img { width: 30%; height: 60px; object-fit: cover; cursor: pointer; border-radius: 5px; border: 1px solid #444; }
-        .preco { font-size: 1.5rem; font-weight: 800; color: var(--accent); margin: 10px 0; }
-        .btn-acao { width: 100%; background: var(--accent); color: white; border: none; padding: 12px; border-radius: 8px; font-weight: bold; cursor: pointer; }
+        /* Filtros Estilizados */
+        .filtros { 
+            display: flex; 
+            justify-content: center; 
+            gap: 10px; 
+            padding: 30px 20px; 
+            flex-wrap: wrap; 
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .filtros button { 
+            background: var(--surface); 
+            color: var(--text-muted); 
+            border: 1px solid var(--border); 
+            padding: 10px 22px; 
+            border-radius: 25px; 
+            cursor: pointer; 
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+        .filtros button:hover {
+            color: white;
+            border-color: #555;
+            transform: translateY(-1px);
+        }
+        .filtros button.ativo { 
+            background: var(--accent); 
+            border-color: var(--accent); 
+            color: white;
+            box-shadow: 0 4px 15px var(--accent-glow);
+        }
 
-        /* Modal Carrinho e Admin */
-        .modal-overlay { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.9); display:none; z-index:2000; justify-content:center; align-items:center; }
-        .modal-content { background:var(--surface); width:90%; max-width:400px; padding:20px; border-radius:20px; }
-        input, select { width:100%; padding:10px; background:#222; color:white; border:1px solid #333; border-radius:6px; margin-bottom:10px; box-sizing:border-box; }
+        /* Vitrine e Cards High-End */
+        .catalogo { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(290px, 1fr)); 
+            gap: 30px; 
+            padding: 0 20px; 
+            max-width: 1240px; 
+            margin: 0 auto; 
+        }
+        .card { 
+            background: var(--surface); 
+            border-radius: 20px; 
+            padding: 18px; 
+            border: 1px solid var(--border); 
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+        .card:hover {
+            transform: translateY(-6px);
+            border-color: #444;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.7);
+        }
+        .container-foto {
+            width: 100%;
+            height: 280px;
+            border-radius: 14px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background: #0f0f0f;
+        }
+        .foto-principal { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+        }
+        .card:hover .foto-principal {
+            transform: scale(1.04);
+        }
+        .miniaturas { 
+            display: flex; 
+            gap: 8px; 
+            margin-bottom: 15px; 
+            overflow-x: auto;
+            padding-bottom: 4px;
+        }
+        .miniaturas img { 
+            width: 65px; 
+            height: 55px; 
+            object-fit: cover; 
+            cursor: pointer; 
+            border-radius: 8px; 
+            border: 1px solid var(--border); 
+            opacity: 0.6;
+        }
+        .miniaturas img:hover, .miniaturas img.active-thumb { 
+            opacity: 1; 
+            border-color: var(--accent); 
+        }
+        .card h3 {
+            margin: 5px 0 10px 0;
+            font-size: 1.2rem;
+            font-weight: 600;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .preco { 
+            font-size: 1.6rem; 
+            font-weight: 800; 
+            color: var(--text); 
+            margin-bottom: 15px; 
+        }
+        .btn-acao { 
+            width: 100%; 
+            background: var(--accent); 
+            color: white; 
+            border: none; 
+            padding: 14px; 
+            border-radius: 12px; 
+            font-weight: 700; 
+            font-size: 1rem;
+            cursor: pointer; 
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 4px 12px rgba(230, 0, 0, 0.2);
+        }
+        .btn-acao:hover { 
+            background: #ff1a1a;
+            box-shadow: 0 6px 20px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+
+        /* Modals Glassmorphism */
+        .modal-overlay { 
+            position: fixed; 
+            top:0; left:0; 
+            width:100%; height:100%; 
+            background: rgba(5, 5, 5, 0.85); 
+            backdrop-filter: blur(10px);
+            display:none; 
+            z-index:2000; 
+            justify-content:center; 
+            align-items:center; 
+            padding: 20px;
+        }
+        .modal-content { 
+            background: var(--surface); 
+            width: 100%;
+            max-width: 460px; 
+            padding: 30px; 
+            border-radius: 24px; 
+            border: 1px solid var(--border);
+            box-shadow: 0 20px 50px rgba(0,0,0,0.8);
+            position: relative;
+            animation: modalFade 0.3s ease;
+        }
+        @keyframes modalFade {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .modal-content h2 { margin-top: 0; font-weight: 700; font-size: 1.6rem; }
+        
+        /* Inputs e Painel Admin */
+        input, select { 
+            width:100%; 
+            padding: 14px; 
+            background: #1a1a1a; 
+            color: white; 
+            border: 1px solid var(--border); 
+            border-radius: 10px; 
+            margin-bottom: 12px; 
+            box-sizing:border-box; 
+            font-family: 'Outfit', sans-serif;
+            font-size: 0.95rem;
+        }
+        input:focus, select:focus {
+            outline: none;
+            border-color: var(--accent);
+            background: #222;
+        }
+        #areaAdmin {
+            background: var(--surface);
+            max-width: 500px; 
+            margin: 30px auto; 
+            padding: 30px; 
+            border: 1px solid var(--border); 
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+        }
+        #areaAdmin h3 { margin-top: 0; font-size: 1.4rem; border-bottom: 1px solid var(--border); padding-bottom: 10px; }
+
+        /* Lista de Itens do Carrinho */
+        #lista-carrinho {
+            max-height: 280px;
+            overflow-y: auto;
+            margin-bottom: 20px;
+            padding-right: 5px;
+        }
+        .carrinho-item {
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            background: #1a1a1a;
+            padding: 12px 16px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border: 1px solid var(--border);
+        }
+        .carrinho-item-info { display: flex; flex-direction: column; gap: 4px; }
+        .carrinho-item-nome { font-weight: 600; }
+        .carrinho-item-preco { color: var(--text-muted); font-size: 0.9rem; }
+        
+        .total-container {
+            border-top: 1px solid var(--border);
+            padding-top: 15px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .total-container h3 { margin: 0; font-size: 1.4rem; font-weight: 800; }
     </style>
 </head>
 <body>
@@ -49,27 +339,37 @@
     <header>
         <h1 class="logo">NEW STYLE</h1>
         <div class="header-btns">
-            <button onclick="window.acessarAdmin()" class="btn-header">Admin</button>
-            <button onclick="window.abrirCarrinho()" class="btn-header" style="border-color:var(--accent)">Carrinho</button>
+            <button onclick="window.acessarAdmin()" class="btn-header">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M11 1a2 2 0 0 0-2 2v4a2 2 0 0 0 2 2v5a2 2 0 0 0 2 2h2a2 2 0 0 0 2-2V9a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2h-4zM0 8a4 4 0 0 1 7.465-2H14v2h-2v2h-2V8H7.465A4 4 0 0 1 0 8z"/></svg> Admin
+            </button>
+            <button onclick="window.abrirCarrinho()" class="btn-header" style="border-color:var(--accent); background: rgba(230,0,0,0.05)">
+                <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5zM3.102 4l1.313 7h8.17l1.313-7H3.102zM5 12a2 2 0 1 0 0 4 2 2 0 0 0 0-4zm7 0a2 2 0 1 0 0 4 2 2 0 0 0 0-4z"/></svg> Carrinho
+            </button>
         </div>
     </header>
 
-    <!-- Modal Carrinho -->
-    <div id="modalCarrinho" class="modal-overlay">
+    <button class="cart-fab" onclick="window.abrirCarrinho()">
+        <svg width="24" height="24" fill="currentColor" viewBox="0 0 16 16"><path d="M0 1.5A.5.5 0 0 1 .5 1H2a.5.5 0 0 1 .485.379L2.89 3H14.5a.5.5 0 0 1 .491.592l-1.5 8A.5.5 0 0 1 13 12H4a.5.5 0 0 1-.491-.408L2.01 3.607 1.61 2H.5a.5.5 0 0 1-.5-.5z"/></svg>
+        <div class="cart-count-badge" id="cart-fab-count">0</div>
+    </button>
+
+    <div id="modalCarrinho" class="modal-overlay" onclick="if(event.target === this) window.fecharCarrinho()">
         <div class="modal-content">
             <h2>Seu Carrinho</h2>
             <div id="lista-carrinho"></div>
-            <h3 id="total-carrinho">Total: R$ 0,00</h3>
+            <div class="total-container">
+                <span>Total Estimado:</span>
+                <h3 id="total-carrinho">R$ 0,00</h3>
+            </div>
             <button onclick="window.finalizarPedido()" class="btn-acao">Finalizar no WhatsApp</button>
-            <button onclick="window.fecharCarrinho()" style="background:none; border:none; color:#666; width:100%; margin-top:10px; cursor:pointer;">Fechar</button>
+            <button onclick="window.fecharCarrinho()" style="background:none; border:none; color:var(--text-muted); width:100%; margin-top:15px; cursor:pointer; font-weight:600;">Voltar ao catálogo</button>
         </div>
     </div>
 
-    <!-- Admin -->
-    <div id="areaAdmin" style="display:none; max-width:400px; margin: 20px auto; padding:20px; border:1px solid var(--accent); border-radius:15px;">
-        <h3>Cadastrar Produto</h3>
+    <div id="areaAdmin" style="display:none;">
+        <h3>Painel do Administrador</h3>
         <form id="formAdminProd">
-            <input type="text" id="adminNome" placeholder="Nome" required>
+            <input type="text" id="adminNome" placeholder="Nome do Produto" required>
             <select id="adminCategoria">
                 <option value="Camisa">Camisa</option><option value="Bermuda">Bermuda</option>
                 <option value="Calça">Calça</option><option value="Jaqueta">Jaqueta</option>
@@ -77,11 +377,11 @@
                 <option value="Tênis">Tênis</option><option value="Perfume">Perfume</option>
                 <option value="Conjuntos">Conjuntos</option>
             </select>
-            <input type="number" id="adminPreco" placeholder="Preço" step="0.01" required>
-            <input type="url" id="adminF1" placeholder="Foto 1" required>
-            <input type="url" id="adminF2" placeholder="Foto 2">
-            <input type="url" id="adminF3" placeholder="Foto 3">
-            <button type="submit" class="btn-acao">Salvar Produto</button>
+            <input type="number" id="adminPreco" placeholder="Preço (Ex: 89.90)" step="0.01" required>
+            <input type="url" id="adminF1" placeholder="URL da Foto Principal" required>
+            <input type="url" id="adminF2" placeholder="URL da Foto 2 (Opcional)">
+            <input type="url" id="adminF3" placeholder="URL da Foto 3 (Opcional)">
+            <button type="submit" class="btn-acao">Salvar Produto na Nuvem</button>
         </form>
     </div>
 
@@ -121,6 +421,14 @@
         window.categoriaAtual = 'Todos';
         window.modoAdmin = false;
 
+        // Atualiza a contagem dos badges visuais imediatamente
+        const atualizarBadgeTotal = () => {
+            const contagem = window.carrinho.length;
+            const badge = document.getElementById('cart-fab-count');
+            if(badge) badge.innerText = contagem;
+        };
+        atualizarBadgeTotal();
+
         onSnapshot(collection(db, "produtos"), (snap) => {
             window.produtos = [];
             snap.forEach(d => window.produtos.push(d.data()));
@@ -132,19 +440,29 @@
             vitrine.innerHTML = '';
             const lista = window.categoriaAtual === 'Todos' ? window.produtos : window.produtos.filter(p => p.categoria === window.categoriaAtual);
             
-            lista.forEach(p => {
-                let mini = `<img src="${p.f1}" onclick="document.getElementById('main-${p.id}').src='${p.f1}'">`;
-                if(p.f2) mini += `<img src="${p.f2}" onclick="document.getElementById('main-${p.id}').src='${p.f2}'">`;
-                if(p.f3) mini += `<img src="${p.f3}" onclick="document.getElementById('main-${p.id}').src='${p.f3}'">`;
+            if(lista.length === 0) {
+                vitrine.innerHTML = `<div style="grid-column: 1/-1; text-align: center; color: var(--text-muted); padding: 40px 0;">Nenhum produto encontrado nesta categoria.</div>`;
+                return;
+            }
 
+            lista.forEach(p => {
+                let mini = `<img src="${p.f1}" class="active-thumb" onclick="document.getElementById('main-${p.id}').src='${p.f1}'; Array.from(this.parentElement.children).forEach(i=>i.classList.remove('active-thumb')); this.classList.add('active-thumb');">`;
+                if(p.f2) mini += `<img src="${p.f2}" onclick="document.getElementById('main-${p.id}').src='${p.f2}'; Array.from(this.parentElement.children).forEach(i=>i.classList.remove('active-thumb')); this.classList.add('active-thumb');">`;
+                if(p.f3) mini += `<img src="${p.f3}" onclick="document.getElementById('main-${p.id}').src='${p.f3}'; Array.from(this.parentElement.children).forEach(i=>i.classList.remove('active-thumb')); this.classList.add('active-thumb');">`;
+
+                // Correção de Bug Crítico: Passando o ID em vez de Strings brutas para evitar quebra de aspas simples (') nos nomes dos produtos
                 vitrine.innerHTML += `
                     <div class="card">
-                        <img src="${p.f1}" class="foto-principal" id="main-${p.id}">
+                        <div class="container-foto">
+                            <img src="${p.f1}" class="foto-principal" id="main-${p.id}" loading="lazy">
+                        </div>
                         <div class="miniaturas">${mini}</div>
                         <h3>${p.nome}</h3>
                         <div class="preco">R$ ${parseFloat(p.preco).toFixed(2).replace('.',',')}</div>
-                        <button class="btn-acao" onclick="window.addCarrinho('${p.nome}', '${p.preco}')">Adicionar</button>
-                        ${window.modoAdmin ? `<button onclick="window.excluir('${p.id}')" style="margin-top:10px; width:100%; background:none; border:1px solid #444; color:red; padding:5px; cursor:pointer;">Excluir</button>` : ''}
+                        <button class="btn-acao" onclick="window.addCarrinhoPorId('${p.id}')">
+                            <svg width="16" height="16" fill="currentColor" viewBox="0 0 16 16"><path d="M8 7.5a.5.5 0 0 1 .5.5v1.5H10a.5.5 0 0 1 0 1H8.5V12a.5.5 0 0 1-1 0v-1.5H6a.5.5 0 0 1 0-1h1.5V8a.5.5 0 0 1 .5-.5z"/><path d="M8 1a2.5 2.5 0 0 1 2.5 2.5V4h-5v-.5A2.5 2.5 0 0 1 8 1zm3.5 3v-.5a3.5 3.5 0 1 0-7 0V4H1v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V4h-3.5zM2 5h12v9a1 1 0 0 1-1 1H3a1 1 0 0 1-1-1V5z"/></svg> Adicionar
+                        </button>
+                        ${window.modoAdmin ? `<button onclick="window.excluir('${p.id}')" style="margin-top:12px; width:100%; background:none; border:1px solid rgba(255,0,0,0.3); color:#ff4444; padding:8px; border-radius:8px; font-weight:600; cursor:pointer;">Remover Produto</button>` : ''}
                     </div>
                 `;
             });
@@ -157,67 +475,124 @@
             renderizarVitrine();
         };
 
-        window.abrirCarrinho = () => { document.getElementById('modalCarrinho').style.display = 'flex'; renderizarCarrinho(); };
-        window.fecharCarrinho = () => { document.getElementById('modalCarrinho').style.display = 'none'; };
+        window.abrirCarrinho = () => { 
+            document.getElementById('modalCarrinho').style.display = 'flex'; 
+            renderizarCarrinho(); 
+        };
+        
+        window.fecharCarrinho = () => { 
+            document.getElementById('modalCarrinho').style.display = 'none'; 
+        };
         
         window.renderizarCarrinho = () => {
             const lista = document.getElementById('lista-carrinho');
             const totalEl = document.getElementById('total-carrinho');
             lista.innerHTML = '';
             let total = 0;
+
+            if(window.carrinho.length === 0) {
+                lista.innerHTML = `<div style="text-align:center; color:var(--text-muted); padding: 20px 0;">Seu carrinho está vazio.</div>`;
+                totalEl.innerText = `R$ 0,00`;
+                return;
+            }
+
             window.carrinho.forEach((item, index) => {
                 total += parseFloat(item.preco);
-                lista.innerHTML += `<div style="display:flex; justify-content:space-between; margin-bottom:10px;">${item.nome} <span>R$ ${parseFloat(item.preco).toFixed(2).replace('.',',')} <button onclick="window.removerItem(${index})" style="background:none; border:none; color:red; cursor:pointer;">X</button></span></div>`;
+                lista.innerHTML += `
+                    <div class="carrinho-item">
+                        <div class="carrinho-item-info">
+                            <span class="carrinho-item-nome">${item.nome}</span>
+                            <span class="carrinho-item-preco">R$ ${parseFloat(item.preco).toFixed(2).replace('.',',')}</span>
+                        </div>
+                        <button onclick="window.removerItem(${index})" style="background:none; border:none; color:#ff4444; font-weight:bold; font-size:1.1rem; cursor:pointer; padding:5px 10px;">&times;</button>
+                    </div>
+                `;
             });
-            totalEl.innerText = `Total: R$ ${total.toFixed(2).replace('.',',')}`;
+            totalEl.innerText = `R$ ${total.toFixed(2).replace('.',',')}`;
         };
 
         window.removerItem = (index) => {
             window.carrinho.splice(index, 1);
             localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
             renderizarCarrinho();
+            atualizarBadgeTotal();
+        };
+
+        // Nova função segura para buscar o produto localmente e injetar sem quebras de sintaxe JavaScript
+        window.addCarrinhoPorId = (id) => {
+            const produto = window.produtos.find(p => p.id === id);
+            if(produto) {
+                window.addCarrinho(produto.nome, produto.preco);
+            }
         };
 
         window.addCarrinho = (nome, preco) => {
             window.carrinho.push({ nome, preco: parseFloat(preco) });
             localStorage.setItem('newstyle_cart', JSON.stringify(window.carrinho));
-            alert("Adicionado ao carrinho!");
+            atualizarBadgeTotal();
+            
+            // Feedback visual elegante e não-intrusivo temporário substituto ao alert tradicional se preferir, mas mantendo a mecânica ativa
+            alert(`${nome} adicionado com sucesso!`);
         };
 
         window.finalizarPedido = () => {
             if(window.carrinho.length === 0) return alert("Carrinho vazio!");
-            let msg = "Pedido NEW STYLE:\n";
+            
+            // Melhoria na formatação sistemática do texto enviado ao WhatsApp (Uso do padrão Markdown para Negritos)
+            let msg = "🛍️ *NOVO PEDIDO - NEW STYLE* 🛍️\n\n";
             let total = 0;
-            window.carrinho.forEach(i => { msg += `- ${i.nome}: R$ ${i.preco.toFixed(2)}\n`; total += i.preco; });
-            msg += `\nTotal: R$ ${total.toFixed(2)}`;
+            window.carrinho.forEach(i => { 
+                msg += `▪️ *${i.nome}* - R$ ${parseFloat(i.preco).toFixed(2).replace('.',',')}\n`; 
+                total += i.preco; 
+            });
+            msg += `\n💰 *Total do Pedido:* R$ ${total.toFixed(2).replace('.',',')}`;
             window.open(`https://wa.me/5548992225893?text=${encodeURIComponent(msg)}`, '_blank');
         };
 
         window.acessarAdmin = () => {
-            if (prompt("Senha:") === 'NEWSTYLE26') {
+            if (prompt("Digite a senha master:") === 'NEWSTYLE26') {
                 window.modoAdmin = true;
+                document.getElementById('areaAdmin').style.styleOpacity = '0';
                 document.getElementById('areaAdmin').style.display = 'block';
+                window.scrollTo({ top: document.getElementById('areaAdmin').offsetTop - 100, behavior: 'smooth' });
                 renderizarVitrine();
+            } else {
+                alert("Senha incorreta!");
             }
         };
 
         window.excluir = async (id) => {
-            if(confirm("Excluir este produto?")) await deleteDoc(doc(db, "produtos", id));
+            if(confirm("Tem certeza que deseja remover este produto definitivamente?")) {
+                try {
+                    await deleteDoc(doc(db, "produtos", id));
+                    alert("Produto removido com sucesso!");
+                } catch(error) {
+                    console.error("Erro ao deletar:", error);
+                    alert("Erro ao excluir do banco de dados.");
+                }
+            }
         };
 
         document.getElementById('formAdminProd').addEventListener('submit', async (e) => {
             e.preventDefault();
             const id = Date.now().toString();
-            await setDoc(doc(db, "produtos", id), {
-                id, nome: document.getElementById('adminNome').value,
-                categoria: document.getElementById('adminCategoria').value,
-                preco: document.getElementById('adminPreco').value,
-                f1: document.getElementById('adminF1').value,
-                f2: document.getElementById('adminF2').value || "",
-                f3: document.getElementById('adminF3').value || ""
-            });
-            alert("Produto cadastrado!");
-            document.getElementById('formAdminProd').reset();
+            
+            try {
+                await setDoc(doc(db, "produtos", id), {
+                    id, 
+                    nome: document.getElementById('adminNome').value.trim(),
+                    categoria: document.getElementById('adminCategoria').value,
+                    preco: parseFloat(document.getElementById('adminPreco').value),
+                    f1: document.getElementById('adminF1').value.trim(),
+                    f2: document.getElementById('adminF2').value.trim() || "",
+                    f3: document.getElementById('adminF3').value.trim() || ""
+                });
+                alert("Produto cadastrado com sucesso na nuvem!");
+                document.getElementById('formAdminProd').reset();
+            } catch(error) {
+                console.error("Erro ao salvar:", error);
+                alert("Erro de conexão ao salvar produto.");
+            }
         });
     </script>
 </body>
